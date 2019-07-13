@@ -1,7 +1,7 @@
-from math import radians, cos, sin, asin, pi, sqrt
-import itertools
+from math import cos, pi  # radians, cos, sin, asin, pi, sqrt
+# import itertools
 # import networkx as nx
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 from app.lib.datasets import GeolifeData

@@ -1,8 +1,8 @@
-import datetime
+# import datetime
 from math import radians, cos, sin, asin, sqrt
 
 import numpy as np
-import pytz
+# import pytz
 
 
 class TrajectoryPoint:
@@ -13,9 +13,9 @@ class TrajectoryPoint:
         self.lon = pnt[1]
         self.alt = pnt[3]
         self.days = pnt[4]
-        self.datetime = (datetime.datetime(1899, 12, 30, tzinfo=pytz.utc) + datetime.timedelta(days=self.days))
-        self.t = self.datetime.timestamp()
-        self.t2 = (self.days * 24 * 60 * 60)
+        # self.datetime = (datetime.datetime(1899, 12, 30, tzinfo=pytz.utc) + datetime.timedelta(days=self.days))
+        # self.t = self.datetime.timestamp()
+        self.t = (self.days * 24 * 60 * 60)
 
     def __str__(self):
         return '[lat: {}  lon: {}  alt: {}  time: {}]'.format(self.lat, self.lon, self.alt, self.t)
