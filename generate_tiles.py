@@ -1,6 +1,6 @@
 import math as m
 import pickle
-import os
+import datetime
 
 # setting constants
 datetimeFormat = '%Y-%m-%d %H:%M:%S'
@@ -11,76 +11,57 @@ def as_radians(degrees):
     return degrees * m.pi / 180
 
 
-def get_xy_pos(relative_null_point, lat, lng):
+def get_xy_pos(relative_null_point, point):
     """ Calculates X and Y distances in meters."""
-    delta_latitude = float(lat) - relative_null_point[0]
-    delta_longitude = float(lng) - relative_null_point[1]
-    latitude_circumference = 40075160 * m.cos(as_radians(relative_null_point[0]))
+    delta_latitude = point['latitude'] - relative_null_point['latitude']
+    delta_longitude = point['longitude'] - relative_null_point['longitude']
+    latitude_circumference = 40075160 * m.cos(as_radians(relative_null_point['latitude']))
     result_x = delta_longitude * latitude_circumference / 360
     result_y = delta_latitude * 40008000 / 360
     return result_x, result_y
 
 
-# def get_lat_lng(relative_null_point, x, y):
-#     latitude_circumference = 40075160 * m.cos(as_radians(relative_null_point['latitude']))
-#     delta_latitude = y * 360 / 40008000
-#     delta_longitude = x * 360 / latitude_circumference
-#
-#     result_lat = delta_latitude + relative_null_point['latitude']
-#     result_lng = delta_longitude + relative_null_point['longitude']
-#     return result_lat, result_lng
+def get_lat_lng(relative_null_point, x, y):
+    latitude_circumference = 40075160 * m.cos(as_radians(relative_null_point['latitude']))
+    delta_latitude = y * 360 / 40008000
+    delta_longitude = x * 360 / latitude_circumference
+
+    result_lat = delta_latitude + relative_null_point['latitude']
+    result_lng = delta_longitude + relative_null_point['longitude']
+    return result_lat, result_lng
 
 
-def get_user_count():
-    files = 0
-    path = 'app/data/geolife/Data'
-    for _, dirnames, filenames in os.walk(path):
-        # ^ this idiom means "we won't be using this value"
-        files += len(dirnames)
-    return int(files / 2)
-
-
-def generate_user_list(n):
-    user_list = []
-    for i in range(n):
-        user_list.append('%03d' % i)
-    return user_list
-
-
-def parse(users, d_s, d_t, relative_null_point):
+def map_function(d_s, d_t):
     d = {}
-    for user in users:
-        pid = 0
-        print("------------USER----------"+user)
-        user_data = 'app/data/geolife/Data/' + user + '/Trajectory/'
-        file_list = os.listdir(user_data)
-        for f in file_list:
-            with open('data/' + user + '/Trajectory/' + f, 'r') as file1:
-                for n, line in enumerate(file1):
-                    if n > 5:
-                        pid += 1
-                        row = (",".join(line.split(',')[0:2]) + "," + ",".join(line.split(',')[4]))
-                        lat, lng, time = row.split(',')[0:3]
-                        pt_lat_conv, pt_lng_conv = get_xy_pos(relative_null_point, lat, lng)
-                        tile_lat_conv = int(pt_lat_conv / d_s) * d_s
-                        tile_lng_conv = int(pt_lng_conv / d_s) * d_s
+    # fragment_dict = DictList()
+    relative_null_point = {'latitude': 39.75872, 'longitude': 116.04142}
+    for i in range(182):  # change to accomodate number of users
+        user_str = '%03d' % i
+        with open('processing/parsed_data/output_' + user_str + '.txt') as f:
+            print(user_str)
+            pid = 0
+            for line in f:
+                pid += 1
+                lat, lng, date1, time1 = line.strip('\n').split(',')[0:5]
+                p['latitude'] = float(lat)
+                p['longitude'] = float(lng)
+                pt_lat_conv, pt_lng_conv = get_xy_pos(relative_null_point, p)
 
-                        # df1 = date + " " + time
-                        # t = datetime.datetime.strptime(df1, datetimeFormat)
-                        # ttotal = t.timestamp()
-                        t = int(float(time) / d_t) * d_t
+                tile_lat_conv = int(pt_lat_conv / d_s) * d_s
+                tile_lng_conv = int(pt_lng_conv / d_s) * d_s
 
-                        hash_str = str(str(tile_lat_conv)) + '_' + str(str(tile_lng_conv) + '_' + str(t))
-                        # hash_str = str(str(hash_lat)) + '_' + str(str(hash_lng) + '_' + str(t))
-                        d[hash_str] = [(user, pt_lat_conv, pt_lng_conv, pid, time, (lat, lng))]
+                df1 = date1 + " " + time1
+                t = datetime.datetime.strptime(df1, datetimeFormat)
+                ttotal = t.timestamp()
+                t = int(t.timestamp() / d_t) * d_t
+                hash_str = str(str(tile_lat_conv)) + '_' + str(str(tile_lng_conv) + '_' + str(t))
+                d[hash_str] = [(user_str, pt_lat_conv, pt_lng_conv, date1, time1, pid, ttotal, (lat, lng))]
     print("Tiles generated")
-    print("No of tiles are: {} for ({}, {})".format(str(len(d.keys())), str(d_s), str(d_t)))
+    print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
     with open("app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:
         pickle.dump(d, f)
 
 
-global_origin = (39.75872, 116.04142)
-ds = 200  # 100 500 1000
-dt = 500  # 300 600 1200
-# map_function(ds, dt)  # call based on ds and dt
-parse(generate_user_list(get_user_count()), ds, dt, global_origin)
+ds = 1000  # 100 500 1000
+dt = 1200  # 300 600 1200
+map_function(ds, dt)  # call based on ds and dt

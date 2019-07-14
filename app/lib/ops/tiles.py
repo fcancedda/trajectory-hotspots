@@ -31,6 +31,7 @@ class GenerateTilesOp(PipelineOp):
 
     def perform(self):
         for uid in self.users:
+            print(uid)
             counter = 0
             for pt, plot in self.data_op.trajectories(uid):
                 counter += 1
@@ -66,7 +67,6 @@ class GenerateTilesOp(PipelineOp):
     def meters_for_lat_lon(self, lat, lon):
         """
         Calculates X and Y distances in meters.
-
         https://stackoverflow.com/a/3024728
         """
         delta_latitude = lat - self.relative_null_lat

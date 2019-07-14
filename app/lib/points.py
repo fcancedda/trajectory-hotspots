@@ -64,4 +64,4 @@ class ContactPoint(TrajectoryPoint):
                 self.alt,
                 self.traj_plt_p1,
                 self.traj_plt_p2
-        )
+                )
