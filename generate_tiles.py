@@ -62,6 +62,6 @@ def map_function(d_s, d_t):
         pickle.dump(d, f)
 
 
-ds = 1000  # 100 500 1000
-dt = 1200  # 300 600 1200
+ds = 200  # 100 500 1000
+dt = 500  # 300 600 1200
 map_function(ds, dt)  # call based on ds and dt

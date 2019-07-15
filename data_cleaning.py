@@ -40,11 +40,11 @@ def generate_user_list(n):
 
 def parse(user):
     print("------------USER----------"+user)
-    user_data = 'data/' + user + '/Trajectory/'
+    user_data = 'app/data/geolife/Data' + user + '/Trajectory/'
     file_list = os.listdir(user_data)
     for f in file_list:
-        with open('data/' + user + '/Trajectory/' + f, 'r') as file1,\
-                open('processing/parsed_data/output_' + user + '.txt', 'a+') as file2:
+        with open('app/data/geolife/Data/' + user + '/Trajectory/' + f, 'r') as file1,\
+                open('app/data/parsed/output_' + user + '.txt', 'a+') as file2:
             for n, line in enumerate(file1):
                 if n > 5:
                     file2.write(",".join(line.split(',')[0:2]) + "," + ",".join(line.split(',')[5:7]))

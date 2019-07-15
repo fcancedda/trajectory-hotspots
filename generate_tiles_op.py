@@ -18,10 +18,11 @@ else:
     print("File Already Exists...")
 
 # ____READ TILES___ #
-# with open(directory, 'rb') as f:
-#     load_dict = pickle.load(f)
+with open(directory, 'rb') as f:
+    load_dict = pickle.load(f)
 
 # ___ANALYZE EACH TILE INDIVIDUALLY____ #
-# for key, data in load_dict.items():
-#     print("key: {}".format(str(key)))
-#     print(data)
+for key, data in load_dict.items():
+    print("key: {}".format(str(key)))
+    print(data)
+    break

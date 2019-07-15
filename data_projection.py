@@ -1,53 +1,65 @@
-import math as m
 import json
-import datetime
-import cartopy.crs as ccrs
-import cartopy.io.shapereader as shpreader
-import matplotlib.pyplot as plt
-
-# setting constants
-datetimeFormat = '%Y-%m-%d %H:%M:%S'
-p = {}
+import plotly as py
+import plotly.graph_objs as go
 
 
-def plot_map():
-    # Downloaded from http://biogeo.ucdavis.edu/data/gadm2/shp/DEU_adm.zip
-    fname = 'map/gadm36_CHN_0.shp'
-
-    adm1_shapes = list(shpreader.Reader(fname).geometries())
-
-    ax = plt.axes(projection=ccrs.PlateCarree())
-
-    plt.title('Deutschland')
-    ax.coastlines(resolution='10m')
-
-    ax.add_geometries(adm1_shapes, ccrs.PlateCarree(),
-                      edgecolor='black', facecolor='gray', alpha=0.5)
-
-    ax.set_extent([4, 16, 47, 56], ccrs.PlateCarree())
-
-    plt.show()
+def grab_map_points(geoJSON):
+    pts = []  # list of points defining boundaries of polygons
+    for feature in geoJSON['features']:  # for each region in china
+        if feature['geometry']['type'] == 'Polygon':
+            pts.extend(feature['geometry']['coordinates'][0])
+            pts.append([None, None])  # mark the end of a polygon
+    x, y = zip(*pts)
+    trace = go.Scatter(
+        x=x,
+        y=y,
+        mode='lines',
+        name='China')
+    return trace
 
 
-def map_function(d_s, d_t):
-    d = {}
-    # fragment_dict = DictList()
-    relative_null_point = {'latitude': 39.75872, 'longitude': 116.04142}
-    for i in range(182):  # change to accomodate number of users
-        user_str = '%03d' % i
-        with open('processing/parsed_data/output_' + user_str + '.txt') as f:
-            print(user_str)
-            for line in f:
-               print(line)
-    print("Tiles generated")
-    print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
-    with open("processing/structure/json_structure_" + str(d_s) + "_" + str(d_t) + ".csv", 'w') as f:
-        json.dump(d, f)
-    # with open("structure/json_structure_"+str(ds)+"_"+str(dt)+".txt") as f:
-    #     load_dict = json.load(f)
+def retrieve_map_trace():
+    with open("map/geojson-map-china-master/china.json") as json_file:
+        jdata = json_file.read()
+        geoJSON = json.loads(jdata)
+
+    trace_of_china = grab_map_points(geoJSON)
+    return trace_of_china
 
 
-ds = 200  # 100 500 1000
-dt = 500  # 300 600 1200
-# map_function(ds, dt)  # call based on ds and dt
-plot_map()
+def retrieve_user_trace(user_uid):
+    user_data_points = []
+    with open('processing/parsed_data/output_' + user_uid + '.txt') as f:
+        for line in f:
+            lat, lng, date, time = line.strip('\n').split(',')[0:5]
+            user_data_points.append((lat, lng))
+
+        Y, X = zip(*user_data_points)
+        # Create a trace
+        user_trace = go.Scatter(
+            x=X,
+            y=Y,
+            mode='markers',
+            name=user_uid
+        )
+        return user_trace
+
+
+data = []
+
+china_traces = retrieve_map_trace()
+
+data.append(china_traces)
+
+for i in range(182):  # change to accommodate number of users
+    user_str = '%03d' % i
+    print(user_str + 'Start')
+    user_trace = retrieve_user_trace(user_str)
+    print(user_str + 'Done')
+    data.append(user_trace)
+
+py.offline.plot({
+    "data": data,
+    "layout": go.Layout(title="user data")
+}, auto_open=True)
+
