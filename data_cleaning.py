@@ -40,7 +40,7 @@ def generate_user_list(n):
 
 def parse(user):
     print("------------USER----------"+user)
-    user_data = 'app/data/geolife/Data' + user + '/Trajectory/'
+    user_data = 'app/data/geolife/Data/' + user + '/Trajectory/'
     file_list = os.listdir(user_data)
     for f in file_list:
         with open('app/data/geolife/Data/' + user + '/Trajectory/' + f, 'r') as file1,\

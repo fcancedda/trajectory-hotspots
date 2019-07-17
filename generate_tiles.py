@@ -55,7 +55,7 @@ def map_function(d_s, d_t):
                 ttotal = t.timestamp()
                 t = int(t.timestamp() / d_t) * d_t
                 hash_str = str(str(tile_lat_conv)) + '_' + str(str(tile_lng_conv) + '_' + str(t))
-                d[hash_str] = [(user_str, pt_lat_conv, pt_lng_conv, date1, time1, pid, ttotal, (lat, lng))]
+                d[hash_str] = [(user_str, pt_lat_conv, pt_lng_conv, pid, ttotal, (lat, lng), (d_s, d_t))]
     print("Tiles generated")
     print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
     with open("app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:

@@ -59,12 +59,15 @@ def parse(users, d_s, d_t, relative_null_point):
                 for n, line in enumerate(file1):
                     if n > 5:
                         pid += 1
+
                         row = (",".join(line.split(',')[0:2]) + "," + ",".join(line.split(',')[4]))
                         lat, lng, time = row.split(',')[0:3]
+
                         pt_lat_conv, pt_lng_conv = get_xy_pos(relative_null_point, lat, lng)
                         tile_lat_conv = int(pt_lat_conv / d_s) * d_s
                         tile_lng_conv = int(pt_lng_conv / d_s) * d_s
 
+                        time = (time - 39421) * 24 * 60 * 60  # total time to seconds
                         # df1 = date + " " + time
                         # t = datetime.datetime.strptime(df1, datetimeFormat)
                         # ttotal = t.timestamp()
