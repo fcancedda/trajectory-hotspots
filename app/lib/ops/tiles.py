@@ -36,6 +36,14 @@ class GenerateTilesOp(PipelineOp):
             for pt in self.data_op.trajectories(uid):  # for pt, plot in self.data_op.trajectories(uid):
                 counter += 1
                 # traj_pt = TrajectoryPoint(pt, uid)
+                print(pt)
+                print(
+                    '\n'
+                )
+                print(pt[0])
+                print("\n")
+                for i in pt[0]:
+                    print(i)  #  lat, lng, date1, time1 =
                 lat, lng = self.meters_for_lat_lon(pt['lat'], pt['lng'])
                 # lat, lng = self.meters_for_lat_lon(pt[0], pt[1])
                 # lat, lng = self.meters_for_lat_lon(traj_pt.lat, traj_pt.lon)

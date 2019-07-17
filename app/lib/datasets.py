@@ -52,7 +52,10 @@ class GeolifeData(PipelineOp):
 
     @staticmethod
     def load_trajectory_plt_points(trajectory_plt):
+        with open(trajectory_plt) as f:
+            for line in f:
+                yield line.strip('\n').split(',')[0:5]  # lat, lng, date1, time1 =
         # return np.genfromtxt(trajectory_plt, delimiter=',', skip_header=6, usecols=range(0, 7))
-        df = pd.read_csv(trajectory_plt, sep=",", header=6,
-                         names=["lat", "lon", "constant0", "alt", "tot_time", "date", "time"])
-        return df.drop(['constant0', 'alt', 'date', 'time'], axis=1)
+        # df = pd.read_csv(trajectory_plt, sep=",", header=6,
+        #                  names=["lat", "lon", "constant0", "alt", "tot_time", "date", "time"])
+        # return df.drop(['constant0', 'alt', 'date', 'time'], axis=1)

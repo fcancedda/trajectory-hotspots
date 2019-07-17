@@ -54,8 +54,9 @@ def parse(users, d_s, d_t, relative_null_point):
         print("------------USER----------"+user)
         user_data = 'app/data/geolife/Data/' + user + '/Trajectory/'
         file_list = os.listdir(user_data)
+        print("------------FILECOUNT ----------" + str(file_list))
         for f in file_list:
-            with open('data/' + user + '/Trajectory/' + f, 'r') as file1:
+            with open('app/data/geolife/data/' + user + '/Trajectory/' + f, 'r') as file1:
                 for n, line in enumerate(file1):
                     if n > 5:
                         pid += 1
