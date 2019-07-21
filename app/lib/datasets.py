@@ -2,7 +2,6 @@ import glob
 import os
 import re
 
-import pandas as pd
 from numpy import array as arr
 from app.lib.pipeline_ops import PipelineOp
 
@@ -35,6 +34,7 @@ class GeolifeData(PipelineOp):
                 uid for uid in os.listdir('app/data/geolife/Data') if re.findall(r'\d{3}', uid)
             ])
             for uid in self.__users:
+                print("loading user {} plots".format(uid))
                 trajectories[uid] = trajectories.get(uid, self.load_user_trajectory_points(uid))
             self.__trajectories = trajectories
         return trajectories
@@ -53,9 +53,6 @@ class GeolifeData(PipelineOp):
     @staticmethod
     def load_trajectory_plt_points(trajectory_plt):
         with open(trajectory_plt) as f:
-            for line in f:
-                yield line.strip('\n').split(',')[0:5]  # lat, lng, date1, time1 =
-        # return np.genfromtxt(trajectory_plt, delimiter=',', skip_header=6, usecols=range(0, 7))
-        # df = pd.read_csv(trajectory_plt, sep=",", header=6,
-        #                  names=["lat", "lon", "constant0", "alt", "tot_time", "date", "time"])
-        # return df.drop(['constant0', 'alt', 'date', 'time'], axis=1)
+            for n, line in enumerate(f):
+                if n > 5:
+                    yield line.strip('\n').split(',')[0:5]  # "lat", "lon", "constant0", "alt", "tot_t", "date", "t"

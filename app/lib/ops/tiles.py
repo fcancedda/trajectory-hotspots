@@ -36,25 +36,15 @@ class GenerateTilesOp(PipelineOp):
             for pt in self.data_op.trajectories(uid):  # for pt, plot in self.data_op.trajectories(uid):
                 counter += 1
                 # traj_pt = TrajectoryPoint(pt, uid)
-                print(pt)
-                print(
-                    '\n'
-                )
-                print(pt[0])
-                print("\n")
-                for i in pt[0]:
-                    print(i)  #  lat, lng, date1, time1 =
-                lat, lng = self.meters_for_lat_lon(pt['lat'], pt['lng'])
-                # lat, lng = self.meters_for_lat_lon(pt[0], pt[1])
+                real_lat = float(pt[0])
+                real_lng = float(pt[1])
+                lat, lng = self.meters_for_lat_lon(real_lat, real_lng)
                 # lat, lng = self.meters_for_lat_lon(traj_pt.lat, traj_pt.lon)
                 # t = traj_pt.t
-                # t = (pt[4] - 39421) * 24 * 60 * 60
-                t = (pt['tot_time'] - 39421) * 24 * 60 * 60
+                t = (float(pt[4])) * 86400  # float(pt[4]) - 39421
 
-                local_lat_meters = int(pt['lat'] / self.ds) * self.ds
-                # local_lat_meters = int(pt[0] / self.ds) * self.ds
-                # local_lng_meters = int(pt[1] / self.ds) * self.ds
-                local_lng_meters = int(pt['lng'] / self.ds) * self.ds
+                local_lat_meters = int(lat / self.ds) * self.ds
+                local_lng_meters = int(lng / self.ds) * self.ds
 
                 # local_lat, local_lon = self.get_lat_lng_from_meters(local_lat_meters, local_lon_meters)
                 local_t = int(t / self.dt) * self.dt
@@ -63,8 +53,7 @@ class GenerateTilesOp(PipelineOp):
                 tile = self.hash_tile(tile_hash)
                 # users = [sub_list[0] for sub_list in tile]
                 # if traj_pt.uid not in users:
-                tile.append([uid, lat, lng, counter, t, (pt['lat'], pt['lng']), (self.ds, self.dt)])
-                # tile.append([uid, lat, lng, counter, t, (pt[0], pt[1]), (self.ds, self.dt)])
+                tile.append([uid, lat, lng, counter, t, (real_lat, real_lng), (self.ds, self.dt)])
         return self._apply_output(self.tiles)
 
     def hash_tile(self, tile_hash):

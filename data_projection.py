@@ -19,7 +19,7 @@ def grab_map_points(geoJSON):
 
 
 def retrieve_map_trace():
-    with open("map/geojson-map-china-master/china.json") as json_file:
+    with open("app/data/map/geojson-map-china-master/china.json") as json_file:
         jdata = json_file.read()
         geoJSON = json.loads(jdata)
 
@@ -29,7 +29,7 @@ def retrieve_map_trace():
 
 def retrieve_user_trace(user_uid):
     user_data_points = []
-    with open('processing/parsed_data/output_' + user_uid + '.txt') as f:
+    with open('app/data/parsed/output_' + user_uid + '.txt') as f:
         for line in f:
             lat, lng, date, time = line.strip('\n').split(',')[0:5]
             user_data_points.append((lat, lng))
