@@ -30,11 +30,10 @@ def parse(user):
             for n, line in enumerate(user_data):
                 if n > 5:
                     vals = line.split(',')
-                    results.append((user, float(vals[0]), float(vals[1]), float(vals[4]) * 86400))  # lat, lng, time
-                    # output_data.append(",".join(line_values[0:2]) + "," + line_values[4])
-    DS.save_data(DataFrame(results, columns=['user', 'lat', 'lng', 'time']), 'app/data/parsed/output_' + user + '.pkl')
-    # df.to_pickle('app/data/parsed/output_' + user + '.pkl')
-    # DS.save_data(output_data, 'app/data/parsed/output_' + user + '.txt')
+                    # results.append((user, float(vals[0]), float(vals[1]), float(vals[4]) * 86400))  # lat, lng, time
+                    results.append(",".join(vals[0:2]) + "," + str(float(vals[4]) * 86400))
+    # DS.save_data(DataFrame(results, columns=['user', 'lat', 'lng', 'time']), 'app/data/parsed/output_'+user+'.pkl')
+    DS.save_data(results, 'app/data/parsed/output_' + user + '.txt')
 
 
 def main():
