@@ -6,7 +6,7 @@ from math import cos, pi  # radians, cos, sin, asin, pi, sqrt
 
 from app.lib.datasets import GeolifeData
 from app.lib.pipeline_ops import PipelineOp
-from app.lib.points import TrajectoryPoint
+# from app.lib.points import TrajectoryPoint
 
 
 class GenerateTilesOp(PipelineOp):
@@ -33,12 +33,15 @@ class GenerateTilesOp(PipelineOp):
         for uid in self.users:
             print(uid)
             counter = 0
-            for pt, plot in self.data_op.trajectories(uid):
+            for pt in self.data_op.trajectories(uid):  # for pt, plot in self.data_op.trajectories(uid):
                 counter += 1
-                traj_pt = TrajectoryPoint(pt, uid)
-
-                lat, lng = self.meters_for_lat_lon(traj_pt.lat, traj_pt.lon)
-                t = traj_pt.t
+                # traj_pt = TrajectoryPoint(pt, uid)
+                real_lat = float(pt[0])
+                real_lng = float(pt[1])
+                lat, lng = self.meters_for_lat_lon(real_lat, real_lng)
+                # lat, lng = self.meters_for_lat_lon(traj_pt.lat, traj_pt.lon)
+                # t = traj_pt.t
+                t = (float(pt[4])) * 86400  # float(pt[4]) - 39421
 
                 local_lat_meters = int(lat / self.ds) * self.ds
                 local_lng_meters = int(lng / self.ds) * self.ds
@@ -50,7 +53,7 @@ class GenerateTilesOp(PipelineOp):
                 tile = self.hash_tile(tile_hash)
                 # users = [sub_list[0] for sub_list in tile]
                 # if traj_pt.uid not in users:
-                tile.append([traj_pt.uid, lat, lng, counter, t, (traj_pt.lat, traj_pt.lon), (self.ds, self.dt)])
+                tile.append([uid, lat, lng, counter, t, (real_lat, real_lng), (self.ds, self.dt)])
         return self._apply_output(self.tiles)
 
     def hash_tile(self, tile_hash):

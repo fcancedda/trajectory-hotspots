@@ -37,7 +37,7 @@ def map_function(d_s, d_t):
     relative_null_point = {'latitude': 39.75872, 'longitude': 116.04142}
     for i in range(182):  # change to accomodate number of users
         user_str = '%03d' % i
-        with open('processing/parsed_data/output_' + user_str + '.txt') as f:
+        with open('app/data/parsed/output_' + user_str + '.txt') as f:
             print(user_str)
             pid = 0
             for line in f:
@@ -45,17 +45,17 @@ def map_function(d_s, d_t):
                 lat, lng, date1, time1 = line.strip('\n').split(',')[0:5]
                 p['latitude'] = float(lat)
                 p['longitude'] = float(lng)
-                pt_lat_conv, pt_lng_conv = get_xy_pos(relative_null_point, p)
+                converted_lat, converted_lng = get_xy_pos(relative_null_point, p)
 
-                tile_lat_conv = int(pt_lat_conv / d_s) * d_s
-                tile_lng_conv = int(pt_lng_conv / d_s) * d_s
+                tile_lat = int(converted_lat / d_s) * d_s
+                tile_lng = int(converted_lng / d_s) * d_s
 
                 df1 = date1 + " " + time1
                 t = datetime.datetime.strptime(df1, datetimeFormat)
                 ttotal = t.timestamp()
                 t = int(t.timestamp() / d_t) * d_t
-                hash_str = str(str(tile_lat_conv)) + '_' + str(str(tile_lng_conv) + '_' + str(t))
-                d[hash_str] = [(user_str, pt_lat_conv, pt_lng_conv, date1, time1, pid, ttotal, (lat, lng))]
+                hash_str = str(str(tile_lat)) + '_' + str(str(tile_lng) + '_' + str(t))
+                d[hash_str] = [(user_str, converted_lat, converted_lng, pid, ttotal, (lat, lng), (d_s, d_t))]
     print("Tiles generated")
     print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
     with open("app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:
