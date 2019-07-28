@@ -1,26 +1,22 @@
 # Trajectory Hotspot Applied
 
 
-Presented at [CVPR 2018](http://cvpr2018.thecvf.com/)
-
 ## PROJECT STRUCTURE
 The overall project Sequence is as follows:
 
-0. import Geolife 'data' folder ~2 GB from **https://www.microsoft.com/en-us/download/details.aspx?id=52367**
+0. (Optional) import full Geolife 'data' folder ~2 GB from [here](https://www.microsoft.com/en-us/download/details.aspx?id=52367)
 
-1. Create results folder running **create_processing_directories.py** 
+1. Parse Raw Data using **data_cleaning.py**
 
-2. Parse Raw Data using **data_parser.py**
+2. Generate Grid Dictionary with **generate_tiles.py**
 
-3. Generate Grid Dictionary with **generate_tiles.py**
+3. Network Analysis in **network_results.py**
 
-4. Network Analysis in **network_results.py**
+4. ThroughPut Analysis inside **network_segments.py**
 
-5. ThroughPut Analysis inside **network_segments.py**
+5. Tensor Generator **network_tensor.py**
 
-6. Tensor Generator **network_tensor.py**
-
-7. Hotspot Visualization done within **network_visuals.py**
+6. Hotspot Visualization done within **network_visuals.py**
 
 
 ##Setup
@@ -28,8 +24,6 @@ The overall project Sequence is as follows:
 All code was developed and tested on MacOS Mojave 10.14.5 with Python 3.7.
 
 You can setup a virtual environment to run the code like this:
-
-
 
 ```bash
 CREATE
@@ -44,7 +38,6 @@ echo $PWD > env/lib/python3.7/site-packages/trajectory-hotspots.pth  # Add curre
 CLOSE
 deactivate
 ```
-
 
 ## Contributors:
  

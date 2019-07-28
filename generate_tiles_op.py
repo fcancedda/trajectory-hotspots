@@ -1,5 +1,5 @@
 from app.lib.ops.tiles import GenerateTilesOp
-from app.lib.data_serializer import DataSerializer as DS
+from app.lib.parsing_ops import DataSerializer as DS
 import os
 
 global_origin = (39.75872, 116.04142)

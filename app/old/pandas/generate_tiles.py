@@ -3,7 +3,7 @@ import math as m
 from pandas import concat
 from multiprocessing.dummy import Pool as ThreadPool
 
-from app.lib.data_serializer import DataSerializer as DS
+from app.lib.parsing_ops import DataSerializer as DS
 
 # setting constants
 datetimeFormat = '%Y-%m-%d %H:%M:%S'

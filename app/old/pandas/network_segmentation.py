@@ -5,7 +5,7 @@ from itertools import combinations
 import pandas as pd
 import os
 
-from app.lib.data_serializer import DataSerializer as DS
+from app.lib.parsing_ops import DataSerializer as DS
 from app.lib.ops.tiles import GenerateTilesOp  # , GraphContactPointsOp
 
 

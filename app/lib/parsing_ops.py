@@ -36,6 +36,30 @@ class DataSerializer:
         return pickle_data
 
 
+class UserLister:
+    @staticmethod
+    def get_user_list():
+        count = 0
+        ls = ['app/data/parsed', 'app/data/out']
+        if os.path.isdir(ls[0]):
+            for _, dirnames, filenames in os.walk(ls[0]):
+                count += len(filenames)
+            if not count:
+                print("Users not found please check directories")
+        else:
+            for directory in ls:
+                if not os.path.exists(directory):
+                    os.mkdir(directory)
+            for _, dirnames, filenames in os.walk('app/data/geolife/Data'):
+                count += len(dirnames)
+            count = count / 2
+        count = int(count)
+        user_list = []
+        for i in range(count):
+            user_list.append('%03d' % i)
+        print('users list {}'.format(user_list))
+        return user_list
+
 # from pandas import to_pickle, read_pickle, DataFrame
 # class DataSerializer:
 #     # Save the data for easy access

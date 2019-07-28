@@ -1,10 +1,15 @@
 import math as m
-import pickle
-import datetime
+
+from app.lib.parsing_ops import DataSerializer as Pickle
+from app.lib.parsing_ops import UserLister as Users
 
 # setting constants
 datetimeFormat = '%Y-%m-%d %H:%M:%S'
 p = {}
+
+
+ds = 1000  # 100 500 1000
+dt = 1200  # 300 600 1200
 
 
 def as_radians(degrees):
@@ -35,33 +40,29 @@ def map_function(d_s, d_t):
     d = {}
     # fragment_dict = DictList()
     relative_null_point = {'latitude': 39.75872, 'longitude': 116.04142}
-    for i in range(182):  # change to accomodate number of users
-        user_str = '%03d' % i
-        with open('app/data/parsed/output_' + user_str + '.txt') as f:
-            print(user_str)
-            pid = 0
-            for line in f:
-                pid += 1
-                lat, lng, date1, time1 = line.strip('\n').split(',')[0:5]
-                p['latitude'] = float(lat)
-                p['longitude'] = float(lng)
-                converted_lat, converted_lng = get_xy_pos(relative_null_point, p)
+    for uid in Users.get_user_list():  # change to accomodate number of users
+        user_data = Pickle.reload_data('app/data/parsed/output_' + uid + '.pkl')
+        # with open('app/data/parsed/output_' + user_str + '.pkl') as f:
+        print(uid)
+        pid = 0
+        for point in user_data:
+            pid += 1
+            lat, lng, time = point.strip('\n').split(',')[0:4]
+            p['latitude'] = float(lat)
+            p['longitude'] = float(lng)
+            converted_lat, converted_lng = get_xy_pos(relative_null_point, p)
 
-                tile_lat = int(converted_lat / d_s) * d_s
-                tile_lng = int(converted_lng / d_s) * d_s
+            tile_lat = int(converted_lat / d_s) * d_s
+            tile_lng = int(converted_lng / d_s) * d_s
+            t = int(float(time) / d_t) * d_t
+            hash_str = str(str(tile_lat)) + '_' + str(str(tile_lng) + '_' + str(t))
+            if hash_str in d:
+                d[hash_str].append((uid, converted_lat, converted_lng, pid, float(time), (lat, lng), (d_s, d_t)))
+            else:
+                d[hash_str] = [(uid, converted_lat, converted_lng, pid, float(time), (lat, lng), (d_s, d_t))]
 
-                df1 = date1 + " " + time1
-                t = datetime.datetime.strptime(df1, datetimeFormat)
-                ttotal = t.timestamp()
-                t = int(t.timestamp() / d_t) * d_t
-                hash_str = str(str(tile_lat)) + '_' + str(str(tile_lng) + '_' + str(t))
-                d[hash_str] = [(user_str, converted_lat, converted_lng, pid, ttotal, (lat, lng), (d_s, d_t))]
-    print("Tiles generated")
-    print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
-    with open("app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:
-        pickle.dump(d, f)
+    print("Number of tiles generated: " + str(len(d.keys())) + str(d_s) + str(d_t))
+    Pickle.save_data(d, "app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".pkl")
 
 
-ds = 200  # 100 500 1000
-dt = 500  # 300 600 1200
 map_function(ds, dt)  # call based on ds and dt
