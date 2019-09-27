@@ -119,6 +119,7 @@ def throughput_analysis(tiles, delta_s, delta_t, step, max_tp):
                         index.append(t[i])
 
     df = pd.DataFrame(data=output, index=index, columns=columns)
+    df.to_csv('out.csv')
     print(df)
 
 
