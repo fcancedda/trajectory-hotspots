@@ -150,9 +150,9 @@ def main():
     step = 60  # integration step size ( 1 MIN )
     max_tp = 1  # maximum throughput allowed by system
     # ___LOAD TILES____ #
-    directory = "app/data/out/generated_grid_" + str(ds) + "_" + str(dt) + ".pkl"
-    op_directory = "app/data/out/generated_grid_op_" + str(ds) + "_" + str(dt) + ".pkl"
-    # new_directory = "app/data/out/generated_grid_new_" + str(ds) + "_" + str(dt) + ".csv"
+    directory = "app/data/tiles/generated_grid_" + str(ds) + "_" + str(dt) + ".pkl"
+    op_directory = "app/data/tiles/generated_grid_op_" + str(ds) + "_" + str(dt) + ".pkl"
+    # new_directory = "app/data/tiles/generated_grid_new_" + str(ds) + "_" + str(dt) + ".csv"
 
     # ___ANALYZE EACH TILE INDIVIDUALLY____ #
     if os.path.isfile(directory):

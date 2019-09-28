@@ -83,7 +83,7 @@ pool.join()
 df = concat(df)
 
 
-DS.save_data(df, "app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".pkl")
+DS.save_data(df, "app/data/tiles/generated_grid_" + str(d_s) + "_" + str(d_t) + ".pkl")
 
 # user_data = DS.reload_data('app/data/parsed/output_' + user_str + '.txt')
 #     pid, time = 0, 0.0
@@ -110,4 +110,4 @@ DS.save_data(df, "app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".
 #         d[hash_str] = [(user_str, converted_lat, converted_lng, pid, t_seconds, (lat, lng), (d_s, d_t))]
 # print("Tiles generated")
 # print("No of tiles are: " + str(len(d.keys())) + str(d_s) + str(d_t))
-# DS.save_data(d, "app/data/out/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv")
+# DS.save_data(d, "app/data/tiles/generated_grid_" + str(d_s) + "_" + str(d_t) + ".csv")

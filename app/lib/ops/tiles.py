@@ -19,7 +19,8 @@ class GenerateTilesOp(PipelineOp):
     ids that have points within that encoded
     spaciotemporal tile (cube).
     """
-    def __init__(self, ds, dt, relative_null_point=(39.75872, 116.04142)):
+    def \
+            __init__(self, ds, dt, relative_null_point=(39.75872, 116.04142)):
         PipelineOp.__init__(self)
         self.tiles = {}
         self.data_op = GeolifeData()

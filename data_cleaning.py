@@ -33,7 +33,7 @@ def parse(user):
                     # results.append((user, float(vals[0]), float(vals[1]), float(vals[4]) * 86400))  # lat, lng, time
                     results.append(",".join(vals[0:2]) + "," + str(float(vals[4]) * 86400))
     # DS.save_data(DataFrame(results, columns=['user', 'lat', 'lng', 'time']), 'app/data/parsed/output_'+user+'.pkl')
-    DS.save_data(results, 'app/data/parsed/output_' + user + '.txt')
+    DS.save_data(results, 'app/data/parsed/output_' + user + '.pkl')
 
 
 def main():

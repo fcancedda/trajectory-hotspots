@@ -1,26 +1,26 @@
 # Trajectory Hotspot Applied
 
 
-Presented at [CVPR 2018](http://cvpr2018.thecvf.com/)
-
 ## PROJECT STRUCTURE
+Adjust granularity by modifying ds & dt values on top of scripts. (default set to 200m and 500s)
+
 The overall project Sequence is as follows:
 
 0. import Geolife 'data' folder ~2 GB from **https://www.microsoft.com/en-us/download/details.aspx?id=52367**
 
-1. Create results folder running **create_processing_directories.py** 
+1. Parse Raw Data using **data_cleaning.py**
 
-2. Parse Raw Data using **data_parser.py**
+2. Generate Grid Dictionary with **generate_tiles_op.py**
 
-3. Generate Grid Dictionary with **generate_tiles.py**
+3. Network Analysis in **network_results.py**
 
-4. Network Analysis in **network_results.py**
+4a. Network generator for Tensor **network_segments_tensor.py**
 
-5. ThroughPut Analysis inside **network_segments.py**
+4b. ThroughPut Analysis inside **network_segments_TP.py**
 
-6. Tensor Generator **network_tensor.py**
+5. Tensor Generator **network_tensor.py**
 
-7. Hotspot Visualization done within **network_visuals.py**
+6. Hotspot Visualization done within **network_visuals.py**
 
 
 ##Setup
@@ -47,6 +47,8 @@ deactivate
 
 
 ## Contributors:
+
+[Francisco Cancedda](https://github.com/fcancedda)
  
 [Matthew Zimmer](https://github.com/matthewzimmer)
 

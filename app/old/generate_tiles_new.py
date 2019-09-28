@@ -78,7 +78,7 @@ def parse(users, d_s, d_t, relative_null_point):
                         # hash_str = str(str(hash_lat)) + '_' + str(str(hash_lng) + '_' + str(t))
                         d[hash_str] = [(user, pt_lat_conv, pt_lng_conv, pid, time, (lat, lng))]
     print("\nNo of tiles are: {} for ({}, {})".format(str(len(d.keys())), str(d_s), str(d_t)))
-    with open("app/data/out/generated_grid_new_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:
+    with open("app/data/tiles/generated_grid_new_" + str(d_s) + "_" + str(d_t) + ".csv", 'wb') as f:
         pickle.dump(d, f)
 
 
