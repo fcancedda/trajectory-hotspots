@@ -19,7 +19,7 @@ def create_graph(file_name):
     return g1
 
 
-# G=create_graph('consolidated_csv/fragments_ds100_dt300.csv')
+# G=create_graph('fragments/fragments_ds100_dt300.csv')
 # def statistice(G):
 # 0.9638707755094332
 
@@ -71,8 +71,8 @@ def get_average_degree(g_list):
     plt.show()
 
 
-list_of_files = ['consolidated_csv/fragments_ds100_dt300.csv', 'consolidated_csv/fragments_ds500_dt600.csv',
-                 'consolidated_csv/fragments_ds1000_dt1200.csv']
+list_of_files = ['fragments/fragments_ds100_dt300.csv', 'fragments/fragments_ds500_dt600.csv',
+                 'fragments/fragments_ds1000_dt1200.csv']
 Graph_List = []
 for filename in list_of_files:
     G = create_graph(filename)

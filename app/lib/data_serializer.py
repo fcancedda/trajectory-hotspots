@@ -34,3 +34,34 @@ class DataSerializer:
                 pickle_data = pickle.load(f)
             print('Data loaded from pickle file.')
         return pickle_data
+
+
+# from pandas import to_pickle, read_pickle, DataFrame
+# class DataSerializer:
+#     # Save the data for easy access
+#     @staticmethod
+#     def save_data(
+#             dataframe,
+#             pickle_file,
+#             overwrite=False
+#     ):
+#         os.makedirs(os.path.dirname(pickle_file), exist_ok=True)
+#         if overwrite or not os.path.isfile(pickle_file):
+#             print('Saving data to pickle file...')
+#             try:
+#                 dataframe.to_pickle(pickle_file)
+#             except Exception as e:
+#                 print('Unable to save data to', pickle_file, ':', e)
+#                 raise
+#         else:
+#             print('WARNING: {} already exists.'.format(pickle_file))
+#
+#         print('Data cached in pickle file.')
+#
+#     @staticmethod
+#     def reload_data(pickle_file):
+#         pickle_data = None
+#         if os.path.isfile(pickle_file):
+#             pickle_data = read_pickle(pickle_file)
+#             print('Data loaded from pickle file.')
+#         return pickle_data

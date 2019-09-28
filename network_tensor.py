@@ -2,10 +2,14 @@ import pandas as pd
 import numpy as np
 import scipy.io
 
+# set ds and dt fot creating fragments
+ds = 200  # 100 500 1000
+dt = 500  # 300 600 1200
+
 
 def load_mat(filename, n):
     df = pd.read_csv(filename)
-    df['date_from_key'] = df['Tile_key '].apply(
+    df['date_from_key'] = df['Tile_key'].apply(
         lambda x: x.split('_')[2])  # please note Tile_key has a space at the end.
 
     df['date_from_key'] = pd.to_datetime(df['date_from_key'], unit='s').dt.date
@@ -21,13 +25,12 @@ def load_mat(filename, n):
                 tensor[row[0], row[5], day] = row[10]
                 tensor[row[5], row[0], day] = row[10]
         day += 1
-    print(tensor)
     return tensor
 
 
 def main():
-    tensor = load_mat('consolidated_csv/fragments_ds1000_dt1200.csv', 182)
-    scipy.io.savemat('Tensor_file/tensordata.mat', mdict={'Tensor_Data': tensor})
+    tensor = load_mat('app/data/fragments/fragments_ds' + str(ds) + '_dt' + str(dt) + '.csv', 182)
+    scipy.io.savemat('app/data/tensors/tensor' + str(ds) + '_dt' + str(dt) + '.mat', mdict={'tensor': tensor})
 
 
 main()
@@ -114,4 +117,3 @@ main()
 #     print(x)
 #     for y in Tensor_file[x]:
 #         print(Tensor_file[x][y])
-
