@@ -9,7 +9,7 @@ dt = 500  # 300 600 1200
 
 def load_mat(filename, n):
     df = pd.read_csv(filename)
-    df['date_from_key'] = df['Tile_key '].apply(
+    df['date_from_key'] = df['Tile_key'].apply(
         lambda x: x.split('_')[2])  # please note Tile_key has a space at the end.
 
     df['date_from_key'] = pd.to_datetime(df['date_from_key'], unit='s').dt.date
@@ -30,7 +30,7 @@ def load_mat(filename, n):
 
 def main():
     tensor = load_mat('app/data/fragments/fragments_ds' + str(ds) + '_dt' + str(dt) + '.csv', 182)
-    scipy.io.savemat('tensors/tensor' + str(ds) + '_dt' + str(dt) + '.mat', mdict={'Tensor_Data': tensor})
+    scipy.io.savemat('app/data/tensors/tensor' + str(ds) + '_dt' + str(dt) + '.mat', mdict={'tensor': tensor})
 
 
 main()
