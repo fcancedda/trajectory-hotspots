@@ -105,7 +105,7 @@ def create_fragments(load_dictionary, delta_s, delta_t):
         # creating column names for csv
         wr.write(
             "UserA,LatA,LngA,Min_time_UserA,Max_time_UserA,UserB,LatB,LngB,Min_time_UserB,Max_time_UserB,"
-            "Distance_apart(m),Interaction_time(ms),Tile_key\n")
+            "Distance_apart(m),Interaction_time(ms),Tile_x,Tile_y,Tile_t,Tile_key\n")
     interaction_time = 0
     # iterate over fragments
     for ft, vt in final_frag.items():
@@ -135,13 +135,19 @@ def create_fragments(load_dictionary, delta_s, delta_t):
                         interaction_time = max(t1_max, t2_max) - min(t1_min, t2_min)
                     # final check for threshold satisfaction
                     check = check_for_outliers(ft, x, y)
+
+                    x_key, y_key, t_key = ft.split('_')
+
+                    # x_new, y_new = get_lat_lng_from_meters(int(x_key), int(y_key))
+                    # ft_new = "{}_{}_{}".format(x_new, y_new, t_key)
+
                     # if check is not -1:
                     with open("app/data/fragments/fragments_ds" + str(delta_s) + "_dt" + str(delta_t) + ".csv", 'a+') \
                             as fn:  # appending to csv
                         fn.write(u1 + "," + str(la1) + "," + str(lo1) + "," + str(t1_min) + "," +
                                  str(t1_max) + "," + u2 + "," + str(la2) + "," + str(lo2) + "," +
-                                 str(t2_min) + "," + str(t2_max) + "," + str(check) +
-                                 "," + str(interaction_time) + "," + ft + "\n")
+                                 str(t2_min) + "," + str(t2_max) + "," + str(check) + "," +
+                                 str(interaction_time) + "," + x_key + "," + y_key + "," + t_key + "," + ft + "\n")
 
 
 # with open("app/data/tiles/generated_grid_op_" + str(ds) + "_" + str(dt) + ".pkl") as f:

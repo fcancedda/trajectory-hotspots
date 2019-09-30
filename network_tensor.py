@@ -1,13 +1,21 @@
 import pandas as pd
 import numpy as np
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+import torch
 import scipy.io
+
+import time
+import sys
 
 # set ds and dt fot creating fragments
 ds = 200  # 100 500 1000
 dt = 500  # 300 600 1200
 
 
-def load_mat(filename, n):
+def user_user_mat(filename, n):
     df = pd.read_csv(filename)
     df['date_from_key'] = df['Tile_key'].apply(
         lambda x: x.split('_')[2])  # please note Tile_key has a space at the end.
@@ -28,9 +36,60 @@ def load_mat(filename, n):
     return tensor
 
 
+def location_count_mat(filename):
+    df = pd.read_csv(filename)
+
+    # granularity reduction
+    df["Tile_x"] = (df["Tile_x"]/100).astype(int)  # M -> DM
+    df["Tile_y"] = (df["Tile_y"]/100).astype(int)
+
+    df['Tile_t'] = round(df['Tile_t'] * 0.000011574074074)  # seconds -> days
+
+    # boolean filtering
+    df = df[(df["Tile_x"] > 200) & (df["Tile_y"] > 100)]  # remove negatives
+    # df = df[(df["Tile_x"] > 100) & (df["Tile_y"] > 0)]  # remove negatives
+    df = df[(df["Tile_x"] < 300) & (df["Tile_y"] < 350)]  # focus on high density region
+    # df = df[(df["Tile_x"] < 400) & (df["Tile_y"] < 400)]  # focus on high density region
+
+    # new origin
+    # first = df['Tile_x'].min()
+    # df['Tile_x'] = df['Tile_x'] - first
+    # first = df['Tile_y'].min()
+    # df['Tile_y'] = df['Tile_y'] - first
+
+    # plot 2D results
+    df.plot(kind='scatter', x='Tile_x', y='Tile_y', color='red')
+    plt.show()
+
+    # plot 3D results
+    # threedee = plt.figure().gca(projection='3d')
+    # threedee.scatter(df["Tile_x"], df["Tile_y"], df['Tile_t'])
+    # threedee.set_xlabel('X')
+    # threedee.set_ylabel('Y')
+    # threedee.set_zlabel('T')
+    # plt.show()
+
+    first = df['Tile_t'].min()
+    df['Tile_t'] = df['Tile_t'] - first
+
+    i = df['Tile_x'].max() + 1
+    j = df['Tile_y'].max() + 1
+    k = int(df['Tile_t'].max()) + 1
+
+    tensor = np.zeros((i, j, k))
+
+    df = df.groupby(['Tile_key'])
+
+    for date, list_rows in df:
+        tensor[list_rows['Tile_x'].iloc[0]][list_rows['Tile_y'].iloc[0]][int(list_rows['Tile_t'].iloc[0])] = len(list_rows)
+    print(tensor)
+    return tensor
+
+
 def main():
-    tensor = load_mat('app/data/fragments/fragments_ds' + str(ds) + '_dt' + str(dt) + '.csv', 182)
-    scipy.io.savemat('app/data/tensors/tensor' + str(ds) + '_dt' + str(dt) + '.mat', mdict={'tensor': tensor})
+    tensor = location_count_mat('network/rit/lab/dmmlab/cisco/trajectory-hotspots/app/data/fragments/fragments_ds' + str(ds) + '_dt' + str(dt) + '.csv')
+    # tensor = user_user_mat('app/data/fragments/fragments_ds' + str(ds) + '_dt' + str(dt) + '.csv', 182)
+    scipy.io.savemat('network/rit/lab/dmmlab/cisco/trajectory-hotspots/app/data/tensors/tensor' + str(ds) + '_dt' + str(dt) + '.mat', mdict={'tensor': tensor})
 
 
 main()
